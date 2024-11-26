@@ -1,0 +1,16 @@
+<!-- transaction_list.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction List</title>
+</head>
+<body>
+    <h1>Transaction List</h1>
+    <ul>
+        {% for transaction in transactions %}
+            <li>{{ transaction.date }}: {{ transaction.transaction_type }} - {{ transaction.amount }} ({{ transaction.category.name }})</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
