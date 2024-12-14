@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+
+    <h1>Dobrodošli!</h1>
+
+    {% if user.is_authenticated %}
+
+        {% if is_admin %}
+            <form method="post">
+                {% csrf_token %}
+                <textarea name="homepage_text" rows="5" cols="50">{{ homepage_text }}</textarea><br>
+                <button type="submit">Ažuriraj tekst</button>
+            </form>
+        {% else %}
+            <p>{{ homepage_text }}</p>
+        {% endif %}
+
+        <p>Vaše ime: {{ user.username }}</p>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Odjavi se</button>
+        </form>
+
+    {% else %}
+        <p>Niste prijavljeni.</p>
+        <a href="{% url 'login' %}">Prijavite se</a><br>
+        <a href="{% url 'register' %}">Registracija</a>
+    {% endif %}
+
+</body>
+</html>
