@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            background-color: #fff;
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s;
+        }
+
+        li:hover {
+            background-color: #f1f1f1;
+        }
+
+        a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #007BFF;
+        }
+
+        p {
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transaction List</h1>
+    <ul>
+        <!-- walletmate_app/transaction_list_partial.html -->
+        <ul id="transaction-list">
+            {% if transactions %}
+                {% for transaction in transactions %}
+                    <li>
+                        <a href="{% url 'transaction_detail' pk=transaction.pk %}">
+                            {{ transaction.date }}: {{ transaction.transaction_type|capfirst }} - {{ transaction.amount }} ({{ transaction.category.name }})
+                        </a>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <p>No transactions available.</p>
+            {% endif %}
+        </ul>
+        
+        
+
+    </ul>
+</body>
+</html>

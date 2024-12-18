@@ -8,8 +8,9 @@ class ExpenseCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self):  # Fixed the method name
         return self.name
+
 
 class Transaction(models.Model):
     TRANSACTION_TYPES = [
@@ -17,6 +18,7 @@ class Transaction(models.Model):
         ('expense', 'Expense'),
     ]
 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
@@ -25,24 +27,23 @@ class Transaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.transaction_type.capitalize()} - {self.amount} ({self.category.name})"
-    
-
+    def _str_(self):
+        user_display = self.user.username if self.user else "No User"
+        return f"{self.transaction_type.capitalize()} - {self.amount} ({self.category.name}, {user_display})"
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    currency = models.CharField(max_length=10, default='EUR')  #currency tracking
+    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Use OneToOneField for user profiles
+    currency = models.CharField(max_length=10, default='EUR')  # Currency tracking
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
+    def __str__(self):  # Fixed the method name
         return f"Profile for {self.user.username}"
 
 
 class Budget(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Removed null=True, blank=True
     category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Budget amount
     start_date = models.DateField()
@@ -50,5 +51,6 @@ class Budget(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"Budget for {self.category.name} ({self.user.username}): {self.amount}"
+    def __str__(self):  # Fixed the method name
+        user_display = self.user.username if self.user else "No User"
+        return f"Budget for {self.category.name} ({user_display}): {self.amount}"

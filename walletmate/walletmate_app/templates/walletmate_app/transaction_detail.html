@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Transaction Detail</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            padding: 20px;
+            background-color: #007BFF;
+            color: white;
+            margin: 0;
+        }
+
+        .transaction-detail {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-detail p {
+            font-size: 16px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .transaction-detail p strong {
+            font-weight: bold;
+            color: #007BFF;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Transaction Detail</h1>
+
+    <div class="transaction-detail">
+        <p><strong>Date:</strong> {{ transaction.date }}</p>
+        <p><strong>Type:</strong> {{ transaction.transaction_type|capfirst }}</p>
+        <p><strong>Amount:</strong> {{ transaction.amount }}</p>
+        <p><strong>Category:</strong> {{ transaction.category.name }}</p>
+        <p><strong>Description:</strong> {{ transaction.description }}</p>
+        <p><strong>Created At:</strong> {{ transaction.created_at }}</p>
+        <p><strong>Updated At:</strong> {{ transaction.updated_at }}</p>
+
+        <a href="{% url 'transaction_list' %}" class="button">Back to Transactions</a>
+    </div>
+</body>
+</html>
