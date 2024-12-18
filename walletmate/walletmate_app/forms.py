@@ -14,4 +14,4 @@ class TransactionFilterForm(forms.Form):
     )
     start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="Start Date")
     end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="End Date")
-    search = forms.CharField(required=False, label="Search", widget=forms.TextInput(attrs={'placeholder': 'Search by description'}))
+    search = forms.CharField(required=False, label="Search")

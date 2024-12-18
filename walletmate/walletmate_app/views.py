@@ -13,7 +13,7 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Transaction, ExpenseCategory
 from django.template.loader import render_to_string
-
+from django.db.models import Q
 
 
 homepage_text = "Promijeni!"
@@ -48,6 +48,7 @@ def transaction_list(request):
     category_id = request.GET.get('category', '')
     start_date = request.GET.get('start_date', '')
     end_date = request.GET.get('end_date', '')
+    search = request.GET.get('search')
 
     # Start with all transactions
     transactions = Transaction.objects.all()
@@ -61,6 +62,13 @@ def transaction_list(request):
         transactions = transactions.filter(date__gte=start_date)
     if end_date:
         transactions = transactions.filter(date__lte=end_date)
+    if search:
+            # You can filter by amount or user (assuming `amount` is a number and `user` is a ForeignKey)
+        transactions = transactions.filter(
+                Q(description__icontains=search) |
+                Q(amount__icontains=search) |
+                Q(user__username__icontains=search)  # Assuming you have a user field in the model
+            )
 
     # Get all categories for the filter dropdown
     categories = ExpenseCategory.objects.all()
