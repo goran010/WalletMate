@@ -1,17 +1,19 @@
 from django import forms
-from .models import Transaction, ExpenseCategory
+from .models import Transaction
 
-class TransactionFilterForm(forms.Form):
-    transaction_type = forms.ChoiceField(
-        choices=[('', 'All'), ('income', 'Income'), ('expense', 'Expense')],
-        required=False,
-        label="Transaction Type"
-    )
-    category = forms.ModelChoiceField(
-        queryset=ExpenseCategory.objects.all(),
-        required=False,
-        label="Category"
-    )
-    start_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="Start Date")
-    end_date = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}), label="End Date")
-    search = forms.CharField(required=False, label="Search")
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['date', 'transaction_type', 'amount', 'category', 'description']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date', 'class': 'form-input'}),
+            'transaction_type': forms.Select(attrs={'class': 'form-select'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-input'}),
+            'category': forms.Select(attrs={'class': 'form-select'}),
+            'description': forms.Textarea(attrs={'class': 'form-input', 'rows': 3}),
+        
+        }
+class TransactionForm(forms.ModelForm):
+    class Meta:
+        model = Transaction
+        fields = ['category', 'amount', 'transaction_type', 'description', 'date']

@@ -4,20 +4,23 @@ from .models import Transaction
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
-from .forms import TransactionFilterForm
 from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Transaction, ExpenseCategory
 from django.template.loader import render_to_string
 from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from .models import Transaction
+from .forms import ExpenseForm, TransactionForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic.edit import UpdateView
 
-
-homepage_text = "Promijeni!"
-
+homepage_text=" test"
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
@@ -119,3 +122,38 @@ def register(request):
 def logout_view(request):
     logout(request)
     return redirect('index')
+
+@login_required
+def add_transaction(request):
+    if request.method == 'POST':
+        form = ExpenseForm(request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.user = request.user  # Assign the logged-in user
+            transaction.save()
+            return redirect('transaction_list')  # Redirect to the transaction list
+    else:
+        form = ExpenseForm()
+    return render(request, 'walletmate_app/add_transaction.html', {'form': form})
+
+def delete_transaction(request, pk):
+    transaction = get_object_or_404(Transaction, pk=pk)
+    if request.method == 'POST':
+        transaction.delete()
+        return redirect('transaction_list')  # Redirect to the transaction list after deletion
+    return redirect('transaction_list')  # In case of non-POST requests, redirect to the transaction list
+
+class TransactionUpdateView(UpdateView):
+    model = Transaction
+    form_class = TransactionForm
+    template_name = 'walletmate_app/transaction_form.html'
+
+    def get_object(self):
+        # Retrieve the object that is to be updated based on the 'pk' (primary key)
+        return get_object_or_404(Transaction, pk=self.kwargs['pk'])
+
+    def form_valid(self, form):
+        # This method is called when the form is valid
+        form.save()
+        # After saving, redirect to the transaction list or detail page
+        return redirect('transaction_list')  # Or redirect to another page, e.g., detail page

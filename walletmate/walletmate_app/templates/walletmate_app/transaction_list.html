@@ -1,177 +1,171 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Transaction List</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-        }
-
-        h1 {
-            text-align: center;
-            color: #333;
-            padding: 10px;
-            background-color: #007BFF;
-            color: white;
-            margin: 0;
-        }
-
-        form {
-            max-width: 800px;
-            margin: 10px auto;
-            padding: 10px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        label {
-            display: block;
-            margin: 8px 0 4px;
-            font-weight: bold;
-        }
-
-        select, input[type="date"], button {
-            width: 100%;
-            padding: 8px;
-            margin: 4px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        #transaction-list {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0;
-            list-style-type: none;
-        }
-
-        #transaction-list li {
-            background-color: #fff;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s;
-        }
-
-        #transaction-list li:hover {
-            background-color: #f1f1f1;
-        }
-
-        #transaction-list a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-
-        #transaction-list a:hover {
-            color: #007BFF;
-        }
-
-        p {
-            text-align: center;
-            color: #666;
-        }
-    </style>
-</head>
-<body>
-    <h1>Transaction List</h1>
-
+{% extends '_base.html' %} {% block content %}
+<div>
+  <div class="container mx-auto">
     <!-- Filter Form -->
-    <form id="filter-form">
-        <label for="transaction_type">Transaction Type:</label>
-        <select id="transaction_type" name="transaction_type">
-            <option value="">-- All --</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
+    <form
+      id="filter-form"
+      class="bg-light-blue-c px-4 py-2 rounded-lg shadow-lg grid grid-cols-7 gap-2"
+    >
+      <!-- Transaction Type -->
+      <div class="col-start-1">
+        <label
+          for="transaction_type"
+          class="block text-sm font-semibold text-dark-blue-c"
+          >Transaction Type</label
+        >
+        <select
+          id="transaction_type"
+          name="transaction_type"
+          class="mt-2 block border w-full border-blue-2-c rounded-lg shadow-sm focus:ring-blue-3-c focus:border-blue-3-c px-4 py-2"
+        >
+          <option value="">-- All --</option>
+          <option value="income">Income</option>
+          <option value="expense">Expense</option>
         </select>
+      </div>
 
-        <label for="category">Category:</label>
-        <select id="category" name="category">
-            <option value="">-- All --</option>
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
+      <!-- Category -->
+      <div class="col-start-2">
+        <label
+          for="category"
+          class="block text-sm font-semibold text-dark-blue-c"
+          >Category</label
+        >
+        <select
+          id="category"
+          name="category"
+          class="mt-2 block border w-full border-blue-2-c rounded-lg shadow-sm focus:ring-blue-3-c focus:border-blue-3-c px-4 py-2"
+        >
+          <option value="">-- All --</option>
+          {% for category in categories %}
+          <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
         </select>
+      </div>
 
-        <label for="start_date">Start Date:</label>
-        <input type="date" id="start_date" name="start_date">
+      <!-- Start Date -->
+      <div class="col-start-3">
+        <label
+          for="start_date"
+          class="block text-sm font-semibold text-dark-blue-c"
+          >Start Date</label
+        >
+        <input
+          type="date"
+          id="start_date"
+          name="start_date"
+          class="mt-2 block border w-full border-blue-2-c rounded-lg shadow-sm focus:ring-blue-3-c focus:border-blue-3-c px-4 py-2"
+        />
+      </div>
 
-        <label for="end_date">End Date:</label>
-        <input type="date" id="end_date" name="end_date">
+      <!-- End Date -->
+      <div class="col-start-4">
+        <label
+          for="end_date"
+          class="block text-sm w-full font-semibold text-dark-blue-c"
+          >End Date</label
+        >
+        <input
+          type="date"
+          id="end_date"
+          name="end_date"
+          class="mt-2 block border w-full border-blue-2-c rounded-lg shadow-sm focus:ring-blue-3-c focus:border-blue-3-c px-4 py-2"
+        />
+      </div>
 
-        <label for="search">Search (by Amount or User):</label>
-        <input type="text" id="search" name="search" placeholder="Search by amount or user">
+      <!-- Search -->
+      <input
+        type="text"
+        id="search"
+        name="search"
+        placeholder="Search by amount or user"
+        class="mt-2 block h-11 border border-blue-2-c rounded-lg shadow-sm focus:ring-blue-3-c focus:border-blue-3-c px-4 col-start-5 col-span-2 self-end"
+      />
 
-        <button type="submit">Filter</button>
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:outline-none font-medium rounded-full text-sm px-6 col-start-7 w-36 h-12 justify-self-center self-end"
+      >
+        Filter
+      </button>
     </form>
 
     <!-- Transaction List -->
-    <ul id="transaction-list">
-        {% if transactions %}
-            {% for transaction in transactions %}
-                <li>
-                    <a href="{% url 'transaction_detail' pk=transaction.pk %}">
-                        {{ transaction.date }}: {{ transaction.transaction_type|capfirst }} - {{ transaction.amount }} ({{ transaction.category.name }})
-                    </a>
-                </li>
-            {% endfor %}
-        {% else %}
-            <p>No transactions available.</p>
+    <div class="mt-6">
+      <ul id="transaction-list" class="space-y-3">
+        {% if transactions %} {% for transaction in transactions %}
+        <li
+          class="bg-white p-4 rounded-lg shadow hover:bg-gray-50 flex justify-between items-center"
+        >
+          <a
+            href="{% url 'transaction_detail' pk=transaction.pk %}"
+            class="text-blue-600 font-semibold hover:underline"
+          >
+            {{ transaction.date }}: {{ transaction.transaction_type|capfirst }}
+            - {{ transaction.amount }} ({{ transaction.category.name }})
+          </a>
+          <div class="flex">
+            <!-- Edit Button -->
+            <a
+              href="{% url 'transaction_update' pk=transaction.pk %}"
+              class="text-blue-500 hover:text-blue-700 focus:outline-none ml-4"
+            >
+              Edit
+            </a>
+            <!-- Delete Button -->
+            <form
+              action="{% url 'delete_transaction' pk=transaction.pk %}"
+              method="POST"
+              class="ml-4"
+              onsubmit="return confirm('Are you sure you want to delete this transaction?');"
+            >
+              {% csrf_token %}
+              <button
+                type="submit"
+                class="text-red-500 hover:text-red-700 focus:outline-none"
+              >
+                Delete
+              </button>
+            </form>
+          </div>
+          <!-- Edit Button -->
+        </li>
+        {% endfor %} {% else %}
+        <p class="text-gray-500 text-center">No transactions available.</p>
         {% endif %}
-    </ul>
+      </ul>
+    </div>
+  </div>
+</div>
 
-    <script>
-        $(document).ready(function() {
-            // Function to handle filter form submission
-            $('#filter-form').on('submit', function(e) {
-                e.preventDefault();  // Prevent default form submission
+<script>
+  $(document).ready(function () {
+    // Function to handle filter form submission
+    $("#filter-form").on("submit", function (e) {
+      e.preventDefault(); // Prevent default form submission
 
-                // Get the values of the form fields
-                const transactionType = $('#transaction_type').val();
-                const category = $('#category').val();
-                const startDate = $('#start_date').val();
-                const endDate = $('#end_date').val();
+      // Get the values of the form fields
+      const transactionType = $("#transaction_type").val();
+      const category = $("#category").val();
+      const startDate = $("#start_date").val();
+      const endDate = $("#end_date").val();
 
-                // Send the AJAX request to the server
-                $.ajax({
-                    url: '{% url "transaction_list" %}',
-                    data: {
-                        transaction_type: transactionType,
-                        category: category,
-                        start_date: startDate,
-                        end_date: endDate
-                    },
-                    success: function(response) {
-                        // Update the transaction list with the filtered data
-                        $('#transaction-list').html(response.transactions_html);
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
-
-
-
-
+      // Send the AJAX request to the server
+      $.ajax({
+        url: '{% url "transaction_list" %}',
+        data: {
+          transaction_type: transactionType,
+          category: category,
+          start_date: startDate,
+          end_date: endDate,
+        },
+        success: function (response) {
+          // Update the transaction list with the filtered data
+          $("#transaction-list").html(response.transactions_html);
+        },
+      });
+    });
+  });
+</script>
+{% endblock %}
