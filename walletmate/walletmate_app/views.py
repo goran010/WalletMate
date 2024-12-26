@@ -8,43 +8,83 @@ from django.contrib.auth.decorators import user_passes_test
 from django.views.generic import ListView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.detail import DetailView
-from django.shortcuts import render
 from django.http import JsonResponse
 from .models import Transaction, ExpenseCategory
 from django.template.loader import render_to_string
 from django.db.models import Q
-from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Transaction
 from .forms import ExpenseForm, TransactionForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import UpdateView
+from .models import UserProfile
 
 homepage_text=" test"
 
 def is_admin(user):
     return user.groups.filter(name='Admin').exists()
 
+
 def index(request):
-    global homepage_text
+    if not request.user.is_authenticated:
+        return redirect('login')  # Replace 'login' with the name of your login URL
+    
+    # If the user is authenticated, query their transactions
+    recent_transactions = Transaction.objects.filter(user=request.user).order_by('-date')[:5]
 
-    if request.method == "POST" and request.user.groups.filter(name='Admin').exists():
-        new_text = request.POST.get("homepage_text")
-        if new_text.strip():
-            homepage_text = new_text
-        return redirect('index')
-
+    # Prepare the context with the recent transactions
     context = {
-        'homepage_text': homepage_text,
-        'is_admin': request.user.groups.filter(name='Admin').exists(),
+        'recent_transactions': recent_transactions,
     }
+
     return render(request, 'walletmate_app/index.html', context)
+
 
 @user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'admin_page.html')
 
 
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+
+        if form.is_valid():
+            # Save the user and retrieve cleaned data
+            user = form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']  # Use 'password1' instead of 'password'
+
+            # Assign user to a group
+            user_group, created = Group.objects.get_or_create(name='Korisnik')
+            user.groups.add(user_group)
+
+            # Authenticate and log in the user
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('index')  # Redirect to a valid URL (e.g., homepage)
+            else:
+                form.add_error(None, "Authentication failed. Please try again.")
+    else:
+        form = UserCreationForm()
+
+    # Pass form to the template
+    context = {'form': form}
+    return render(request, 'registration/register.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')
+
+
+
+def profile_view(request):
+    profile = UserProfile.objects.get(user=request.user)
+    return render(request, 'walletmate_app/profile.html', {'profile': profile})
+
+#CRUD
 def transaction_list(request):
     # Get the filter parameters from the request
     transaction_type = request.GET.get('transaction_type', '')
@@ -95,34 +135,6 @@ class TransactionDetailView(LoginRequiredMixin, DetailView):
         return Transaction.objects.all()
 
 
-
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-
-        if form.is_valid():
-            user = form.save()
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-
-            user_group, created = Group.objects.get_or_create(name='Korisnik')
-            user.groups.add(user_group)
-
-            user = authenticate(username=username, password=password)
-            login(request, user)
-
-            return redirect('index')
-
-    else:
-        form = UserCreationForm()
-
-    context = {'form': form}
-    return render(request, 'registration/register.html', context)
-
-def logout_view(request):
-    logout(request)
-    return redirect('index')
-
 @login_required
 def add_transaction(request):
     if request.method == 'POST':
@@ -136,12 +148,15 @@ def add_transaction(request):
         form = ExpenseForm()
     return render(request, 'walletmate_app/add_transaction.html', {'form': form})
 
+
+@login_required
 def delete_transaction(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk)
     if request.method == 'POST':
         transaction.delete()
         return redirect('transaction_list')  # Redirect to the transaction list after deletion
     return redirect('transaction_list')  # In case of non-POST requests, redirect to the transaction list
+
 
 class TransactionUpdateView(UpdateView):
     model = Transaction
@@ -157,3 +172,8 @@ class TransactionUpdateView(UpdateView):
         form.save()
         # After saving, redirect to the transaction list or detail page
         return redirect('transaction_list')  # Or redirect to another page, e.g., detail page
+    
+
+def transaction_report(request):
+# Logic to generate the report
+    return render(request, 'walletmate_app/transaction_report.html')

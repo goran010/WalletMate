@@ -13,6 +13,7 @@ class ExpenseForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-input', 'rows': 3}),
         
         }
+        
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction

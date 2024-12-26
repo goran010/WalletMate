@@ -2,7 +2,7 @@ module.exports = {
   content: [
     './templates/**/*.html', // Include all HTML files in templates directory
     './**/templates/**/*.html', // Include nested templates
-    './**/*.py', // Optionally include Python files if using Tailwind classes in strings
+    './**/templates/registration/*.html'
   ],
   theme: {
     extend: {

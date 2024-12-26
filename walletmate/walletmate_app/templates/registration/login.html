@@ -1,33 +1,107 @@
-{% if form.errors %}
-    <div style="color: red; font-weight: bold; margin-bottom: 10px;">
-        <h3>Unos nije ispravan.</h3>
-    </div>
-{% endif %}
+{% load compress %} 
+{% load static %}
 
-{% if next %}
-    {% if user.is_authenticated %}
-        <p style="color: #e74c3c;">
-            Your account doesn't have access to this page. To proceed, please login with an account that has access.
-        </p>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+
+    <title>Walletmate</title>
+
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}" />
+    {% endcompress %}
+  </head>
+  <body class="bg-light-blue-c">
+    {% if form.errors %}
+    <div class="text-red-500 font-bold mb-5 text-center">
+      <h3>Unos nije ispravan.</h3>
+    </div>
+    {% endif %} {% if next %} {% if user.is_authenticated %}
+    <p class="text-center text-red-500">
+      Your account doesn't have access to this page. To proceed, please login
+      with an account that has access.
+    </p>
     {% else %}
-        <p>Please login to see this page.</p>
-    {% endif %}
-{% endif %}
+    <p class="text-center">Please login to see this page.</p>
+    {% endif %} {% endif %}
 
-<form method="post" action="{% url 'login' %}" style="max-width: 400px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9;">
-    {% csrf_token %}
-    <table style="width: 100%;">
-      <tr>
-        <td style="padding: 5px; text-align: right;">{{ form.username.label_tag }}</td>
-        <td style="padding: 5px;">{{ form.username }}</td>
-      </tr>
-      <tr>
-        <td style="padding: 5px; text-align: right;">{{ form.password.label_tag }}</td>
-        <td style="padding: 5px;">{{ form.password }}</td>
-      </tr>
-    </table>
-    <div style="text-align: center; margin-top: 10px;">
-        <input type="submit" value="Login" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;" />
+    <div class="flex justify-center items-center min-h-screen bg-light-blue-c">
+      <form
+        method="post"
+        action="{% url 'login' %}"
+        class="max-w-sm w-full p-8 border border-gray-300 rounded-lg shadow-xl bg-white"
+      >
+        {% csrf_token %}
+
+        <!-- Username Field -->
+        <div class="mb-6">
+          <label
+            for="{{ form.username.id_for_label }}"
+            class="block font-semibold text-gray-800"
+            >{{ form.username.label }}</label
+          >
+          <input
+            type="text"
+            name="username"
+            id="{{ form.username.id_for_label }}"
+            value=""
+            class="w-full px-4 py-2 border border-gray-300 rounded-md text-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-2-c"
+          />
+        </div>
+
+        <!-- Password Field -->
+        <div class="mb-6">
+          <label
+            for="{{ form.password.id_for_label }}"
+            class="block font-semibold text-gray-800"
+            >{{ form.password.label }}</label
+          >
+          <input
+            type="password"
+            name="password"
+            id="{{ form.password.id_for_label }}"
+            value=""
+            class="w-full px-4 py-2 border border-gray-300 rounded-md text-lg mt-2 focus:outline-none focus:ring-2 focus:ring-blue-2-c"
+          />
+          <!-- Forgot Password Link -->
+          <div class="text-right mb-6">
+            <a
+              href="{% url 'password_reset' %}"
+              class="text-blue-500 text-sm text-right mb-6"
+              >Forgot your password?</a
+            >
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="text-center">
+          <input
+            type="submit"
+            value="Login"
+            class="w-full px-6 py-3 bg-dark-blue-c text-white rounded-md cursor-pointer text-lg transition duration-300 hover:bg-blue-1-c focus:outline-none focus:ring-2 focus:bg-blue-1-c "
+          />
+        </div>
+
+        <!-- Hidden Next Value -->
+        <input type="hidden" name="next" value="{{ next }}" />
+
+        <!-- Already have an account? Register Link -->
+        <div class="text-center mt-5">
+          <p class="text-sm">
+            Don't have an account?
+            <a href="{% url 'register' %}" class="text-blue-2-c"
+              >Sign up here</a
+            >
+          </p>
+        </div>
+      </form>
     </div>
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+  </body>
+</html>
