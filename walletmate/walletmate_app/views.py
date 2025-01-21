@@ -13,11 +13,16 @@ from .models import Transaction, ExpenseCategory
 from django.template.loader import render_to_string
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from .models import Transaction
 from .forms import ExpenseForm, TransactionForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import UpdateView
 from .models import UserProfile
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import TransactionSerializer
+from rest_framework.generics import RetrieveUpdateAPIView
+from rest_framework.viewsets import ModelViewSet
 
 homepage_text=" test"
 
@@ -177,3 +182,26 @@ class TransactionUpdateView(UpdateView):
 def transaction_report(request):
 # Logic to generate the report
     return render(request, 'walletmate_app/transaction_report.html')
+
+
+class TransactionList(APIView):
+    def get(self, request):
+        posts =  Transaction.objects.all()
+        serializer =  TransactionSerializer(posts, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        serializer =  TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TransactionUpdateAPIView(RetrieveUpdateAPIView):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    
+class TransactionViewSet(ModelViewSet):
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    

@@ -42,7 +42,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'walletmate_app',
-     'compressor',
+    'compressor',
+    'rest_framework',
+    
 ]
 
 MIDDLEWARE = [
