@@ -2,6 +2,7 @@ from django.urls import path
 from . import views
 from rest_framework.routers import DefaultRouter
 from walletmate_app.views import TransactionViewSet, TransactionUpdateAPIView
+from rest_framework.authtoken.views import ObtainAuthToken
 
 # Traditional Django views
 urlpatterns = [
@@ -17,8 +18,12 @@ urlpatterns = [
 
 # API-specific routes
 router = DefaultRouter()
-router.register(r'api/transactions', TransactionViewSet, basename='transaction')  # ViewSet handles all CRUD actions
+router.register(r'api/transactions', TransactionViewSet, basename='transaction')
 
 # Add router-generated URLs to urlpatterns
 urlpatterns += router.urls
+
+urlpatterns += [
+    path('api/token/', ObtainAuthToken.as_view(), name='api_token_auth'),
+]
 

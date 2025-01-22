@@ -23,6 +23,11 @@ from rest_framework import status
 from .serializers import TransactionSerializer
 from rest_framework.generics import RetrieveUpdateAPIView
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+from .models import Transaction
+from .serializers import TransactionSerializer
 
 homepage_text=" test"
 
@@ -200,8 +205,12 @@ class TransactionList(APIView):
 class TransactionUpdateAPIView(RetrieveUpdateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
     
 class TransactionViewSet(ModelViewSet):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
+    authentication_classes = [TokenAuthentication]  # Use token-based authentication
+    permission_classes = [IsAuthenticated]
     

@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'walletmate_app',
     'compressor',
     'rest_framework',
-    
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +147,12 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'compressor.finders.CompressorFinder',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',  # Require authentication by default
+    ],
+}
