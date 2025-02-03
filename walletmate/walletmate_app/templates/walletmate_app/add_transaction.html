@@ -1,6 +1,6 @@
 {% extends '_base.html' %} {% block content %}
 <div class="flex justify-center items-center min-h-fit">
-  <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md my-16 ">
+  <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md my-16">
     <!-- Form Header -->
     <h2 class="text-3xl font-bold text-center text-gray-900">
       Add Transaction
@@ -8,7 +8,7 @@
     <p class="text-gray-500 text-center mt-2">Manage your expenses with ease</p>
 
     <!-- Transaction Form -->
-    <form method="POST" class=" space-y-3">
+    <form method="POST" class="space-y-3">
       {% csrf_token %} {% for field in form %}
       <div>
         <label

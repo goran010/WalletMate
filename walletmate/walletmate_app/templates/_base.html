@@ -1,57 +1,96 @@
-{% load compress %}
-{% load static %}
- 
+{% load compress %} {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
 
     <title>Walletmate</title>
-    
-    {% compress css %}
-    <link rel="stylesheet" href="{% static 'src/output.css' %}">
-    {% endcompress %}
-</head>
-<body class="bg-light-blue-c flex flex-col min-h-screen">
 
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}" />
+    {% endcompress %}
+  </head>
+  <body class="bg-light-blue-c flex flex-col min-h-screen">
     <!-- Navigation Bar -->
     <nav class="bg-dark-blue-c p-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center">
-            <a href="{% url 'index' %}" class="text-white text-2xl font-bold" aria-label="Homepage">MySite</a>
+      <div class="container mx-auto flex justify-between items-center">
+        <a
+          href="{% url 'index' %}"
+          class="text-white text-2xl font-bold"
+          aria-label="Homepage"
+          >MySite</a
+        >
 
-            <div class="flex space-x-6">
-                <a href="{% url 'index' %}" class="text-white hover:underline" aria-label="Home">Home</a>
-                <a href="{% url 'transaction_list' %}" class="text-white hover:underline" aria-label="Add transaction">Transactions</a>
-                <a href="{% url 'add_transaction' %}" class="text-white hover:underline" aria-label="Add transaction">Add transaction</a>
+        <div class="flex space-x-6">
+          <a
+            href="{% url 'index' %}"
+            class="text-white hover:underline"
+            aria-label="Home"
+            >Home</a
+          >
+          <a
+            href="{% url 'transaction_list' %}"
+            class="text-white hover:underline"
+            aria-label="Add transaction"
+            >Transactions</a
+          >
+          <a
+            href="{% url 'add_transaction' %}"
+            class="text-white hover:underline"
+            aria-label="Add transaction"
+            >Add transaction</a
+          >
 
-                {% if user.is_authenticated %}
-                    <a href="{% url 'profile' %}" class="text-white hover:underline" aria-label="Profile">Profile</a>
-                    <form method="POST" action="{% url 'logout' %}" class="inline-block">
-                        {% csrf_token %}
-                        <button type="submit" class="text-white hover:underline" aria-label="Logout">Logout</button>
-                    </form>
-                {% else %}
-                    <a href="{% url 'login' %}" class="text-white hover:underline" aria-label="Login">Login</a>
-                {% endif %}
-            </div>
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'profile' %}"
+            class="text-white hover:underline"
+            aria-label="Profile"
+            >Profile</a
+          >
+          <form method="POST" action="{% url 'logout' %}" class="inline-block">
+            {% csrf_token %}
+            <button
+              type="submit"
+              class="text-white hover:underline"
+              aria-label="Logout"
+            >
+              Logout
+            </button>
+          </form>
+          {% else %}
+          <a
+            href="{% url 'login' %}"
+            class="text-white hover:underline"
+            aria-label="Login"
+            >Login</a
+          >
+          {% endif %}
         </div>
+      </div>
     </nav>
 
     <!-- Page Content -->
     <div class="container mx-auto mt-2 flex-grow">
-        {% block content %}
-        {% endblock %}
+      {% block content %} {% endblock %}
     </div>
 
     <!-- Footer -->
     <footer class="bg-dark-blue-c text-white text-center p-4 mt-auto">
-        <p>&copy; 2025 Walletmate. All rights reserved.</p>
-        <p><a href="https://github.com/goran010/WalletMate" class="hover:underline">GitHub</a> | <a href="#" class="hover:underline">Terms of Service</a></p>
+      <p>&copy; 2025 Walletmate. All rights reserved.</p>
+      <p>
+        <a href="https://github.com/goran010/WalletMate" class="hover:underline"
+          >GitHub</a
+        >
+        | <a href="#" class="hover:underline">Terms of Service</a>
+      </p>
     </footer>
-
-</body>
+  </body>
 </html>
