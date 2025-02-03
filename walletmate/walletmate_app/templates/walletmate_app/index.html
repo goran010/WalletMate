@@ -10,25 +10,26 @@
     </div>
 
     <!-- Financial Overview -->
+    <!-- Financial Overview -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
       <!-- Total Balance -->
       <div class="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition duration-300 ease-in-out">
         <h2 class="text-xl font-semibold text-gray-700">Total Balance</h2>
-        <p class="text-3xl font-bold text-blue-600">$5,120.50</p>
-        <p class="text-sm text-gray-500">as of December 2024</p>
+        <p class="text-3xl font-bold text-blue-600">${{ total_balance|floatformat:2 }}</p>
+        <p class="text-sm text-gray-500">as of {{ today }}</p>
       </div>
 
       <!-- Expenses Overview -->
       <div class="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition duration-300 ease-in-out">
         <h2 class="text-xl font-semibold text-gray-700">Total Expenses</h2>
-        <p class="text-3xl font-bold text-red-600">$1,240.75</p>
+        <p class="text-3xl font-bold text-red-600">${{ total_expenses|floatformat:2 }}</p>
         <p class="text-sm text-gray-500">in the last 30 days</p>
       </div>
 
       <!-- Income Overview -->
       <div class="bg-white p-6 rounded-lg shadow-lg text-center hover:shadow-xl transition duration-300 ease-in-out">
         <h2 class="text-xl font-semibold text-gray-700">Total Income</h2>
-        <p class="text-3xl font-bold text-green-600">$3,750.00</p>
+        <p class="text-3xl font-bold text-green-600">${{ total_income|floatformat:2 }}</p>
         <p class="text-sm text-gray-500">in the last 30 days</p>
       </div>
     </div>

@@ -20,6 +20,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Transaction, ExpenseCategory, UserProfile
 from .forms import ExpenseForm, TransactionForm
 from .serializers import TransactionSerializer
+from django.db.models import Sum
+from django.utils.timezone import now
 
 # --- Constants ---
 HOMEPAGE_TEXT = "Welcome to WalletMate!"
@@ -32,9 +34,23 @@ def is_admin(user):
 # --- Views ---
 @login_required
 def index(request):
-    """Home page view displaying recent transactions."""
+    """Home page view displaying real financial data."""
+    total_income = Transaction.objects.filter(user=request.user, transaction_type="income").aggregate(Sum("amount"))["amount__sum"] or 0
+    total_expenses = Transaction.objects.filter(user=request.user, transaction_type="expense").aggregate(Sum("amount"))["amount__sum"] or 0
+    total_balance = total_income - total_expenses
+
+    # Fetch recent transactions
     recent_transactions = Transaction.objects.filter(user=request.user).order_by('-date')[:5]
-    return render(request, 'walletmate_app/index.html', {'recent_transactions': recent_transactions})
+
+    context = {
+        "total_income": total_income,
+        "total_expenses": total_expenses,
+        "total_balance": total_balance,
+        "recent_transactions": recent_transactions,
+        "today": now().strftime("%B %d, %Y"),
+    }
+
+    return render(request, 'walletmate_app/index.html', context)
 
 
 @user_passes_test(is_admin)
@@ -203,3 +219,5 @@ class TransactionViewSet(ModelViewSet):
 
     def get_queryset(self):
         return Transaction.objects.filter(user=self.request.user)
+    
+

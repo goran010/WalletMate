@@ -1,30 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Transaction</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 font-sans">
-    <div class="container mx-auto py-8">
-        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">
-            Add Transaction
-        </h1>
+{% extends '_base.html' %} {% block content %}
+<div class="flex justify-center items-center max-h-screen min-h-fit pt-16">
+  <div class="bg-white p-8 rounded-xl shadow-xl w-full max-w-md">
+    <!-- Form Header -->
+    <h2 class="text-3xl font-bold text-center text-gray-900">
+      Add Transaction
+    </h2>
+    <p class="text-gray-500 text-center mt-2">Manage your expenses with ease</p>
 
-        <div class="bg-white p-6 rounded-lg shadow-md">
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <div class="mt-4 text-center">
-                    <button 
-                        type="submit" 
-                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                        Save Transaction
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-</body>
-</html>
+    <!-- Transaction Form -->
+    <form method="POST" class="mt-6 space-y-3">
+      {% csrf_token %} {% for field in form %}
+      <div>
+        <label
+          for="{{ field.id_for_label }}"
+          class="block text-gray-800 font-semibold mb-2"
+        >
+          {{ field.label }}
+        </label>
+        <div class="relative">{{ field }}</div>
+        {% if field.help_text %}
+        <p class="text-sm text-gray-500">{{ field.help_text }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+      <!-- Submit Button -->
+      <button
+        type="submit"
+        class="w-full py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
+      >
+        Save Transaction
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

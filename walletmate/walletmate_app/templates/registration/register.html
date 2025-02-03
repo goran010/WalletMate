@@ -10,17 +10,17 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
-    <title>Walletmate</title>
+    <title>WalletMate | Register</title>
     {% compress css %}
     <link rel="stylesheet" href="{% static 'src/output.css' %}" />
     {% endcompress %}
   </head>
   <body
-    class="flex flex-col justify-center items-center h-screen bg-light-blue-c"
+    class="flex flex-col justify-center items-center h-screen bg-dark-blue-c"
   >
     <div class="text-red-600 font-bold mb-5 text-center min-h-1/2">
       {% if form.errors %}
-      <h3>Greška. Molimo pokušajte ponovo.</h3>
+      <h3>⚠️ Error. Please try again.</h3>
       <ul class="list-disc list-inside text-red-500 text-sm">
         {% for field, errors in form.errors.items %}
         <li>{{ field|capfirst }}: {{ errors|join:", " }}</li>
@@ -28,32 +28,30 @@
       </ul>
       {% endif %}
     </div>
+
     <form
       method="post"
       action="{% url 'register' %}"
-      class="max-w-md w-full bg-white p-6 border border-gray-300 rounded-lg shadow-xl"
+      class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md"
     >
       {% csrf_token %}
-
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Sign up</h2>
       <!-- Username Field -->
       <div class="mb-5">
         <label
           for="{{ form.username.id_for_label }}"
           class="block font-bold text-gray-700"
-          >{{ form.username.label }}</label
+          >Username</label
         >
         <input
           type="text"
           name="username"
           id="{{ form.username.id_for_label }}"
           value="{{ form.username.value|default_if_none:'' }}"
-          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-2-c"
+          placeholder="Enter your username"
+          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
-        {% if form.username.errors %}
-        <p class="text-red-500 text-sm mt-1">
-          {{ form.username.errors|join:", " }}
-        </p>
-        {% endif %}
       </div>
 
       <!-- Email Field -->
@@ -68,34 +66,27 @@
           name="email"
           id="{{ form.email.id_for_label }}"
           value="{{ form.email.value|default_if_none:'' }}"
-          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-2-c"
+          placeholder="Enter your email"
+          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
-        {% if form.email.errors %}
-        <p class="text-red-500 text-sm mt-1">
-          {{ form.email.errors|join:", " }}
-        </p>
-        {% endif %}
       </div>
 
       <!-- Password Field -->
       <div class="mb-5">
         <label
-          for="{{ form.password.id_for_label }}"
+          for="{{ form.password1.id_for_label }}"
           class="block font-bold text-gray-700"
           >Password</label
         >
         <input
           type="password"
           name="password1"
-          id="{{ form.password.id_for_label }}"
-          value=""
-          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-2-c"
+          id="{{ form.password1.id_for_label }}"
+          placeholder="Enter your password"
+          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
-        {% if form.password.errors %}
-        <p class="text-red-500 text-sm mt-1">
-          {{ form.password.errors|join:", " }}
-        </p>
-        {% endif %}
       </div>
 
       <!-- Confirm Password Field -->
@@ -103,36 +94,33 @@
         <label
           for="{{ form.password2.id_for_label }}"
           class="block font-bold text-gray-700"
-          >{{ form.password2.label }}</label
+          >Confirm Password</label
         >
         <input
           type="password"
           name="password2"
           id="{{ form.password2.id_for_label }}"
-          value=""
-          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-2-c"
+          placeholder="Confirm your password"
+          class="w-full p-3 border border-gray-300 rounded-md text-base mt-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
         />
-        {% if form.password2.errors %}
-        <p class="text-red-500 text-sm mt-1">
-          {{ form.password2.errors|join:", " }}
-        </p>
-        {% endif %}
       </div>
 
       <!-- Submit Button -->
       <div class="text-center">
-        <input
+        <button
           type="submit"
-          value="Register"
-          class="w-full p-3 bg-dark-blue-c text-white rounded-md cursor-pointer text-base font-medium transition duration-300 hover:bg-blue-1-c focus:outline-none focus:ring-2 focus:ring-blue-1-c"
-        />
+          class="w-full py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-700 rounded-lg shadow-md hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
+        >
+          Register
+        </button>
       </div>
 
       <!-- Already have an account? Login Link -->
       <div class="text-center mt-4">
         <p class="text-sm">
           Already have an account?
-          <a href="{% url 'login' %}" class="text-blue-2-c hover:underline"
+          <a href="{% url 'login' %}" class="text-blue-500 hover:underline"
             >Login here</a
           >
         </p>
