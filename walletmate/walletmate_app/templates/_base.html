@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
 </head>
-<body class="bg-light-blue-c ">
+<body class="bg-light-blue-c flex flex-col min-h-screen">
 
     <!-- Navigation Bar -->
     <nav class="bg-dark-blue-c p-4 shadow-md">
@@ -42,10 +42,16 @@
     </nav>
 
     <!-- Page Content -->
-    <div class="container mx-auto mt-2">
+    <div class="container mx-auto mt-2 flex-grow">
         {% block content %}
         {% endblock %}
     </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark-blue-c text-white text-center p-4 mt-auto">
+        <p>&copy; 2025 Walletmate. All rights reserved.</p>
+        <p><a href="https://github.com/goran010/WalletMate" class="hover:underline">GitHub</a> | <a href="#" class="hover:underline">Terms of Service</a></p>
+    </footer>
 
 </body>
 </html>
