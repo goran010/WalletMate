@@ -9,6 +9,10 @@ from django.template.loader import render_to_string
 from django.utils.timezone import now
 from django.conf import settings
 import requests
+import json
+from django.shortcuts import render
+from django.db.models import Sum
+from .models import Transaction
 
 # Django Class-Based Views (CBV)
 from django.views.generic import DetailView, UpdateView
@@ -151,3 +155,35 @@ class TransactionUpdateView(LoginRequiredMixin, UpdateView):
         else:
             form.add_error(None, "Failed to update transaction via API.")
             return self.form_invalid(form)
+
+
+@login_required
+def transaction_report(request):
+    """Generates a transaction report grouped by user and transaction type."""
+    
+    # Aggregate income and expenses by user
+    transactions = (
+        Transaction.objects
+        .values("user__username", "transaction_type")
+        .annotate(total_amount=Sum("amount"))
+    )
+
+    # Transform data for Chart.js
+    users = list(set(t["user__username"] for t in transactions))
+    income_data = {user: 0 for user in users}
+    expense_data = {user: 0 for user in users}
+
+    for t in transactions:
+        if t["transaction_type"] == "income":
+            income_data[t["user__username"]] = t["total_amount"]
+        elif t["transaction_type"] == "expense":
+            expense_data[t["user__username"]] = t["total_amount"]
+
+    chart_data = {
+        "users": users,
+        "income": list(income_data.values()),
+        "expenses": list(expense_data.values()),
+    }
+
+    return render(request, "walletmate_app/transaction_report.html", {"chart_data": json.dumps(chart_data)})
+

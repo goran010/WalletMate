@@ -21,6 +21,8 @@ urlpatterns = [
     path('transactions/delete/<int:pk>/', views.delete_transaction, name='delete_transaction'),
     path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
     path('transactions/update/<int:pk>/', TransactionUpdateView.as_view(), name='transaction_update'),
+    path('transaction-report/', views.transaction_report, name='transaction_report'),
+
 ]
 
 # API-specific routes
