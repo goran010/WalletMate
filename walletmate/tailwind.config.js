@@ -2,7 +2,7 @@ module.exports = {
   content: [
     './templates/**/*.html', // Include all HTML files in templates directory
     './**/templates/**/*.html', // Include nested templates
-    './**/templates/registration/*.html'
+    './**/templates/login/*.html'
   ],
   theme: {
     extend: {
