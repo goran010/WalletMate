@@ -27,7 +27,7 @@ class Transaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def _str_(self):
+    def __str__(self):
         user_display = self.user.username if self.user else "No User"
         return f"{self.transaction_type.capitalize()} - {self.amount} ({self.category.name}, {user_display})"
 

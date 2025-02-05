@@ -1,44 +1,30 @@
 [
   {
     "model": "walletmate_app.transaction",
-    "pk": 1,
+    "pk": 4,
     "fields": {
-      "user": 2,
+      "user": 4,
+      "category": 7,
+      "amount": "1500.00",
+      "transaction_type": "income",
+      "date": "2025-02-05",
+      "description": "Placa test",
+      "created_at": "2025-02-05T12:54:42.506Z",
+      "updated_at": "2025-02-05T12:54:42.506Z"
+    }
+  },
+  {
+    "model": "walletmate_app.transaction",
+    "pk": 5,
+    "fields": {
+      "user": 5,
       "category": 1,
       "amount": "100.00",
       "transaction_type": "expense",
       "date": "2025-02-04",
-      "description": "PotroÜnja na hranu",
-      "created_at": "2025-02-04T21:37:55.733Z",
-      "updated_at": "2025-02-04T21:37:55.733Z"
-    }
-  },
-  {
-    "model": "walletmate_app.transaction",
-    "pk": 2,
-    "fields": {
-      "user": 3,
-      "category": 7,
-      "amount": "1500.00",
-      "transaction_type": "income",
-      "date": "2025-02-04",
-      "description": "Uplata",
-      "created_at": "2025-02-04T21:38:27.954Z",
-      "updated_at": "2025-02-04T21:38:27.954Z"
-    }
-  },
-  {
-    "model": "walletmate_app.transaction",
-    "pk": 3,
-    "fields": {
-      "user": 4,
-      "category": 6,
-      "amount": "1000.00",
-      "transaction_type": "expense",
-      "date": "2024-12-17",
-      "description": "Putovanje",
-      "created_at": "2025-02-04T21:38:52.824Z",
-      "updated_at": "2025-02-04T21:38:52.825Z"
+      "description": "Hrana test",
+      "created_at": "2025-02-05T12:54:58.727Z",
+      "updated_at": "2025-02-05T12:54:58.727Z"
     }
   }
 ]
