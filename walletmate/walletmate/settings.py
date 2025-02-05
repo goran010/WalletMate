@@ -152,3 +152,5 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAuthenticated',  # Require authentication by default
     ],
 }
+
+BASE_API_URL = "http://127.0.0.1:8000"

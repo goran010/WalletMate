@@ -19,10 +19,13 @@ urlpatterns = [
     path('transaction-report/', views.transaction_report, name='transaction_report'),
     path('transactions/<int:pk>/', views.TransactionDetailView.as_view(), name='transaction_detail'),
     path('transactions/update/<int:pk>/', TransactionUpdateView.as_view(), name='transaction_update'),
+    path('transactions/<int:pk>/', views.TransactionDetailView.as_view(), name='transaction_detail'),
+
 ]
 
 # API-specific routes
 router = DefaultRouter()
+
 router.register(r'api/transactions', TransactionViewSet, basename='transaction')
 
 # Add router-generated URLs to urlpatterns
