@@ -8,7 +8,7 @@ class ExpenseCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):  # Fixed the method name
+    def __str__(self):
         return self.name
 
 
@@ -27,18 +27,18 @@ class Transaction(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def _str_(self):
+    def __str__(self):
         user_display = self.user.username if self.user else "No User"
         return f"{self.transaction_type.capitalize()} - {self.amount} ({self.category.name}, {user_display})"
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Use OneToOneField for user profiles
-    currency = models.CharField(max_length=10, default='EUR')  # Currency tracking
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=10, default='EUR')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):  # Fixed the method name
+    def __str__(self):
         return f"Profile for {self.user.username}"
 
 
@@ -51,6 +51,6 @@ class Budget(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):  # Fixed the method name
+    def __str__(self):
         user_display = self.user.username if self.user else "No User"
         return f"Budget for {self.category.name} ({user_display}): {self.amount}"

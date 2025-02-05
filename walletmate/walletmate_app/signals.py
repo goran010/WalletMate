@@ -5,9 +5,15 @@ from django.dispatch import receiver
 @receiver(post_migrate)
 def load_fixtures(sender, **kwargs):
     if sender.name == "walletmate_app":
-        call_command("loaddata", "walletmate_app/fixtures/expensecategory.json")
-        call_command("loaddata", "walletmate_app/fixtures/transactions.json")
-        call_command("loaddata", "walletmate_app/fixtures/userprofiles.json")
-        call_command("loaddata", "walletmate_app/fixtures/budget.json")
-        call_command("loaddata", "walletmate_app/fixtures/users.json")
-        call_command("loaddata", "walletmate_app/fixtures/groups.json")
+        fixtures = [
+            "content_types.json",
+            "permissions.json",
+            "users.json",
+            "groups.json",
+            "expense_categories.json",
+            "transactions.json",
+            "user_profiles.json",
+            "budgets.json",
+        ]
+        for fixture in fixtures:
+            call_command("loaddata", f"walletmate_app/fixtures/{fixture}")
