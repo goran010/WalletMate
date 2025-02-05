@@ -20,4 +20,3 @@ def load_fixtures(sender, **kwargs):
         call_command("loaddata", "walletmate_app/fixtures/budget.json")
         call_command("loaddata", "walletmate_app/fixtures/users.json")
         call_command("loaddata", "walletmate_app/fixtures/groups.json")
-
