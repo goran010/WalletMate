@@ -29,8 +29,8 @@ urlpatterns = [
     # Class-Based Views for Transactions
     path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
     path('transactions/update/<int:pk>/', TransactionUpdateView.as_view(), name='transaction_update'),
+    path('users/', views.user_list_view, name='user_list'),
 
     # API Routes
     path('api/', include(router.urls)),  # Includes all routes from DefaultRouter
-    path('api/token/', ObtainAuthToken.as_view(), name='api_token_auth'),  # API Authentication route
 ]
