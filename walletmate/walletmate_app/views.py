@@ -44,7 +44,7 @@ def register(request):
                 form.add_error(None, "Authentication failed. Please try again.")
     else:
         form = UserCreationForm()
-    return render(request, 'login/register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})
 
 
 def logout_view(request):
