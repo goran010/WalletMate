@@ -4,16 +4,14 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.template.loader import render_to_string
 from django.utils.timezone import now
 from django.conf import settings
 import requests
 import json
-from django.shortcuts import render
 from django.db.models import Sum
 from .models import Transaction
-from decimal import Decimal
 
 # Django Class-Based Views (CBV)
 from django.views.generic import DetailView, UpdateView

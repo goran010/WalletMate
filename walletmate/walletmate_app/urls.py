@@ -1,8 +1,6 @@
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from rest_framework.routers import DefaultRouter
-from rest_framework.authtoken.views import ObtainAuthToken
-
 from . import views
 from .api_views import TransactionViewSet
 from .views import TransactionDetailView, TransactionUpdateView
