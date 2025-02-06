@@ -22,6 +22,7 @@ urlpatterns = [
     path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
     path('transactions/update/<int:pk>/', TransactionUpdateView.as_view(), name='transaction_update'),
     path('transaction-report/', views.transaction_report, name='transaction_report'),
+    path('users/', views.user_list_view, name='user_list'),
 
 ]
 

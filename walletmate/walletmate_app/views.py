@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q, Sum
@@ -22,10 +22,30 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Transaction, ExpenseCategory, UserProfile
 from .forms import ExpenseForm, TransactionForm
 
-# Utility Functions
+
 def is_admin(user):
-    """Check if a user belongs to the Admin group."""
-    return user.groups.filter(name='Admin').exists()
+    """Provjera je li korisnik superuser ili pripada grupi 'administracija'."""
+    return user.is_superuser or user.groups.filter(name='administracija').exists()
+
+@login_required
+@user_passes_test(is_admin)
+def user_list_view(request):
+    search_query = request.GET.get('search', '')
+    users = User.objects.all()
+
+    if search_query:
+        users = users.filter(username__icontains=search_query)
+        
+    users_with_admin_status = sorted(
+        [{'user': user, 'is_admin': is_admin(user)} for user in users],
+        key=lambda x: not x['is_admin']
+    )
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  
+        return render(request, 'walletmate_app/user_list_partial.html', {'users': users_with_admin_status})
+
+    return render(request, 'walletmate_app/user_list.html', {'users': users_with_admin_status})
+
 
 # Authentication Views
 def register(request):
