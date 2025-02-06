@@ -16,6 +16,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('profile/', views.profile_view, name='profile'),
     path('register/', views.register, name='register'),
+    path('users/', views.user_list_view, name='user_list'),
 
     # Authentication (Using Django's built-in views)
     path('accounts/logout/', auth_views.LogoutView.as_view(next_page='index'), name='logout'),
@@ -29,8 +30,7 @@ urlpatterns = [
     # Class-Based Views for Transactions
     path('transactions/<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
     path('transactions/update/<int:pk>/', TransactionUpdateView.as_view(), name='transaction_update'),
-    path('users/', views.user_list_view, name='user_list'),
 
     # API Routes
-    path('api/', include(router.urls)),  # Includes all routes from DefaultRouter
+    path('api/', include(router.urls)),
 ]

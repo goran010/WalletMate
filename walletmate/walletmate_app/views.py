@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group, User
+from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Q, Sum
@@ -13,6 +13,7 @@ import json
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Transaction
+from decimal import Decimal
 
 # Django Class-Based Views (CBV)
 from django.views.generic import DetailView, UpdateView
@@ -22,30 +23,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Transaction, ExpenseCategory, UserProfile
 from .forms import ExpenseForm, TransactionForm
 
-
+# Utility Functions
 def is_admin(user):
-    """Provjera je li korisnik superuser ili pripada grupi 'administracija'."""
-    return user.is_superuser or user.groups.filter(name='administracija').exists()
-
-@login_required
-@user_passes_test(is_admin)
-def user_list_view(request):
-    search_query = request.GET.get('search', '')
-    users = User.objects.all()
-
-    if search_query:
-        users = users.filter(username__icontains=search_query)
-        
-    users_with_admin_status = sorted(
-        [{'user': user, 'is_admin': is_admin(user)} for user in users],
-        key=lambda x: not x['is_admin']
-    )
-
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  
-        return render(request, 'walletmate_app/user_list_partial.html', {'users': users_with_admin_status})
-
-    return render(request, 'walletmate_app/user_list.html', {'users': users_with_admin_status})
-
+    """Check if a user belongs to the Admin group."""
+    return user.groups.filter(name='Admin').exists()
 
 # Authentication Views
 def register(request):
@@ -100,9 +81,6 @@ def index(request):
     return render(request, 'walletmate_app/index.html', context)
 
 
-
-from decimal import Decimal
-
 @login_required
 def report(request):
     """Generates a transaction report showing percentage distribution by category."""
@@ -136,7 +114,6 @@ def report(request):
         "expense_labels": list(expense_data.keys()),
         "expense_percentages": list(expense_data.values()),
     }
-    print(chart_data)
 
     return render(request, "walletmate_app/report.html", {"chart_data": json.dumps(chart_data)})
 
@@ -219,32 +196,20 @@ class TransactionUpdateView(LoginRequiredMixin, UpdateView):
 
 
 @login_required
-def transaction_report(request):
-    """Generates a transaction report grouped by user and transaction type."""
-    
-    # Aggregate income and expenses by user
-    transactions = (
-        Transaction.objects
-        .values("user__username", "transaction_type")
-        .annotate(total_amount=Sum("amount"))
+@user_passes_test(is_admin)
+def user_list_view(request):
+    search_query = request.GET.get('search', '')
+    users = User.objects.all()
+
+    if search_query:
+        users = users.filter(username__icontains=search_query)
+        
+    users_with_admin_status = sorted(
+        [{'user': user, 'is_admin': is_admin(user)} for user in users],
+        key=lambda x: not x['is_admin']
     )
 
-    # Transform data for Chart.js
-    users = list(set(t["user__username"] for t in transactions))
-    income_data = {user: 0 for user in users}
-    expense_data = {user: 0 for user in users}
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  
+        return render(request, 'walletmate_app/user_list_partial.html', {'users': users_with_admin_status})
 
-    for t in transactions:
-        if t["transaction_type"] == "income":
-            income_data[t["user__username"]] = t["total_amount"]
-        elif t["transaction_type"] == "expense":
-            expense_data[t["user__username"]] = t["total_amount"]
-
-    chart_data = {
-        "users": users,
-        "income": list(income_data.values()),
-        "expenses": list(expense_data.values()),
-    }
-
-    return render(request, "walletmate_app/transaction_report.html", {"chart_data": json.dumps(chart_data)})
-
+    return render(request, 'walletmate_app/user_list.html', {'users': users_with_admin_status})
