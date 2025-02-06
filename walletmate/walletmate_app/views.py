@@ -124,7 +124,32 @@ def transaction_list(request):
     """Lists transactions with optional filters."""
     transactions = Transaction.objects.filter(user=request.user)
     categories = ExpenseCategory.objects.all()
+
+    # Apply filters based on request GET parameters
+    transaction_type = request.GET.get('transaction_type', '')
+    category_id = request.GET.get('category', '')
+    start_date = request.GET.get('start_date', '')
+    end_date = request.GET.get('end_date', '')
+
+    if transaction_type:
+        transactions = transactions.filter(transaction_type=transaction_type)
+    
+    if category_id:
+        transactions = transactions.filter(category_id=category_id)
+    
+    if start_date:
+        transactions = transactions.filter(date__gte=start_date)
+    
+    if end_date:
+        transactions = transactions.filter(date__lte=end_date)
+
+    # Check if the request is an AJAX call
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        transactions_html = render_to_string('walletmate_app/transaction_list_partial.html', {'transactions': transactions}, request)
+        return JsonResponse({'transactions_html': transactions_html})
+
     return render(request, 'walletmate_app/transaction_list.html', {'transactions': transactions, 'categories': categories})
+
 
 
 @login_required
