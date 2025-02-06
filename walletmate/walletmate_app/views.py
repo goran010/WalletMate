@@ -80,6 +80,47 @@ def index(request):
     return render(request, 'walletmate_app/index.html', context)
 
 
+
+from decimal import Decimal
+
+@login_required
+def report(request):
+    """Generates a transaction report showing percentage distribution by category."""
+    
+    # Aggregate total income and expenses for each category
+    category_totals = (
+        Transaction.objects
+        .values("category__name", "transaction_type")
+        .annotate(total_amount=Sum("amount"))
+    )
+
+    # Calculate total income and total expenses separately
+    total_income = sum(t["total_amount"] for t in category_totals if t["transaction_type"] == "income")
+    total_expense = sum(t["total_amount"] for t in category_totals if t["transaction_type"] == "expense")
+
+    # Prepare percentage data for chart
+    income_data = {}
+    expense_data = {}
+
+    for t in category_totals:
+        category_name = t["category__name"]
+        if t["transaction_type"] == "income":
+            income_data[category_name] = float(t["total_amount"] / total_income * 100) if total_income else 0
+        elif t["transaction_type"] == "expense":
+            expense_data[category_name] = float(t["total_amount"] / total_expense * 100) if total_expense else 0
+
+    # Format data for Chart.js
+    chart_data = {
+        "income_labels": list(income_data.keys()),
+        "income_percentages": list(income_data.values()),
+        "expense_labels": list(expense_data.keys()),
+        "expense_percentages": list(expense_data.values()),
+    }
+    print(chart_data)
+
+    return render(request, "walletmate_app/report.html", {"chart_data": json.dumps(chart_data)})
+
+
 # Transactions Views
 @login_required
 def transaction_list(request):
