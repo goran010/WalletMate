@@ -8,7 +8,7 @@ class ExpenseCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):  # Fixed the method name
+    def __str__(self):
         return self.name
 
 
@@ -20,7 +20,7 @@ class Transaction(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     category = models.ForeignKey(ExpenseCategory, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Decimal field causing JSON issues
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
     transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES)
     date = models.DateField()
     description = models.TextField(blank=True, null=True)
@@ -33,8 +33,8 @@ class Transaction(models.Model):
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)  # Use OneToOneField for user profiles
-    currency = models.CharField(max_length=10, default='EUR')  # Currency tracking
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=10, default='EUR')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

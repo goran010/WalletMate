@@ -1,10 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
 from django.contrib.auth.models import User
-
-
 from walletmate_app.models import *
-
 
 class UserFactory(DjangoModelFactory):
     class Meta:

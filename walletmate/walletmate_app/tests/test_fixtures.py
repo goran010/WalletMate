@@ -4,7 +4,6 @@ from django.contrib.auth.models import User, Group
 import json
 
 #check if fixture data is correctly loaded into the database
-
 class FixtureTestCase(TestCase):
     fixtures = [
         'users.json',

@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 from datetime import date
 
 #Check if the transaction model correctly saves data and returns the expected string representation
-
 class TestTransactionModel(TestCase):
     def setUp(self):
         self.user = User.objects.create_user(username="testuser", password="password123")
