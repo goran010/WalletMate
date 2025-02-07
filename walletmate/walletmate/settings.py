@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["walletmate-1.onrender.com", "127.0.0.1", "localhost"]
 
+CSRF_TRUSTED_ORIGINS = [
+    "https://walletmate-1.onrender.com",
+]
 
 # Application definition
 
