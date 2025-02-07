@@ -23,11 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*48uqic-(*7s&-g@+hm81d^ng4k)(%)mh4(862n)6dv=0n^7jv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-
-
 
 # Application definition
 
@@ -140,6 +138,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'   # For collectstatic to gather files
 # Compressor settings
 COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_ENABLED = True
+COMPRESS_OFFLINE = True
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',

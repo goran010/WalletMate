@@ -17,16 +17,16 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}" />
     {% endcompress %}
   </head>
-  <body class="bg-light-blue-c flex flex-col min-h-screen">
+  <body class="bg-light-blue-c flex flex-col min-h-screen ">
     <!-- Navigation Bar -->
-    <nav class="bg-dark-blue-c p-4 shadow-md">
+    <nav class="bg-dark-blue-c p-2 shadow-md max-h-20">
       <div class="container mx-auto flex justify-between items-center">
         <a
           href="{% url 'index' %}"
           class="text-white text-2xl font-bold"
           aria-label="Homepage"
         >
-          MySite
+           <img src="{% static 'src/images/logo.svg' %}" alt="Walletmate Logo" class="h-20 w-auto mr-2 svg-white">
         </a>
 
         <div class="flex space-x-6">

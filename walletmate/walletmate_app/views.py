@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.db.models import Sum
@@ -21,10 +21,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Transaction, ExpenseCategory, UserProfile
 from .forms import ExpenseForm, TransactionForm
 
-# Utility Functions
-def is_admin(user):
-    """Check if a user belongs to the Admin group."""
-    return user.groups.filter(name='Admin').exists()
 
 # Authentication Views
 def register(request):
@@ -149,7 +145,6 @@ def transaction_list(request):
     return render(request, 'walletmate_app/transaction_list.html', {'transactions': transactions, 'categories': categories})
 
 
-
 @login_required
 def add_transaction(request):
     """Adds a new transaction both locally and via API request."""
@@ -217,6 +212,10 @@ class TransactionUpdateView(LoginRequiredMixin, UpdateView):
             form.add_error(None, "Failed to update transaction via API.")
             return self.form_invalid(form)
 
+
+def is_admin(user):
+    """Provjera je li korisnik superuser ili pripada grupi 'administracija'."""
+    return user.is_superuser or user.groups.filter(name='administracija').exists()
 
 @login_required
 @user_passes_test(is_admin)
