@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*48uqic-(*7s&-g@+hm81d^ng4k)(%)mh4(862n)6dv=0n^7jv'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["walletmate-1.onrender.com", "127.0.0.1", "localhost"]
 
