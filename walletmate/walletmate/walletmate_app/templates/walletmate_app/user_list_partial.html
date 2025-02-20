@@ -1,9 +1,0 @@
-{% for user_data in users %}
-<li class="bg-white p-4 rounded-lg shadow hover:bg-gray-50 flex items-center">
-    <p class="{% if user_data.is_admin %}text-red-600{% else %}text-blue-600{% endif %} font-semibold">
-        {{ user_data.user.username }}
-    </p>
-</li>
-{% empty %}
-<p class="text-gray-500 text-center">No users available.</p>
-{% endfor %}
