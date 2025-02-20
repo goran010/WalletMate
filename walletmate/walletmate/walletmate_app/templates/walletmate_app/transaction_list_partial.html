@@ -1,0 +1,15 @@
+<ul>
+  {% for transaction in transactions %}
+  <li
+    class="bg-white rounded-lg shadow-md p-4 hover:bg-gray-50 transition-colors"
+  >
+    <a
+      href="{% url 'transaction_detail' pk=transaction.pk %}"
+      class="text-lg font-semibold text-gray-700 hover:text-blue-500"
+    >
+      {{ transaction.date }}: {{ transaction.transaction_type|capfirst }} - ${{
+      transaction.amount }} ({{ transaction.category.name }})
+    </a>
+  </li>
+  {% endfor %}
+</ul>
